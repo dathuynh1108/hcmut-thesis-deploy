@@ -1,0 +1,108 @@
+services:
+  sfu:
+    image: huynhthanhdat1108/ion-sfu:latest
+    volumes:
+      - ./configs/sfu.toml:/configs/sfu.toml
+      - ./logs:/logs
+    # restart: always
+    command: -c /configs/sfu.toml
+    ports:
+      - 5000:5000 # ICE mux port
+    networks:
+      - backend 
+    depends_on:
+      - redis
+    
+  controller:
+    image: huynhthanhdat1108/controller:latest
+    volumes:
+      - ./configs/controller.toml:/configs/controller.toml
+      - ./configs/rtsp-simple-server:/configs/rtsp-simple-server
+      - ./configs/rtsp-simple-server.yml:/configs/rtsp-simple-server.yml
+      - ./logs:/logs
+      - ./videos:/videos
+    # restart: always
+    command: -c /configs/controller.toml
+    ports:
+      - 5551:5551 # gRPC port
+      - 8554:8554 # RTSP port
+      - 8322:8322 # RTP port
+      - 8080:8080 # HTTP + WS port
+      - 8000-8003:8000-8003 # multicast 
+    networks:
+      - backend
+    depends_on:
+      - redis
+
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=12345
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongodb_data:/data/db
+    networks:
+      - backend 
+
+  message-broker-server:
+    image: huynhthanhdat1108/message-broker-server:latest
+    ports:
+        - 5672:5672
+        - 15672:15672
+        - 1883:1883
+    volumes:
+        - ./docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ./docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - backend 
+
+  node-api-server:
+    image: huynhthanhdat1108/node-api-server:latest
+    volumes:
+      - ./configs/node-api-server.toml:/configs/node-api-server.toml 
+    environment:
+      - BROKER_HOST=rabbitmq
+      - CONFIG_PATH=/confgis/node-api-server.toml
+    restart: always
+    ports:
+      - "3000:3000"
+      - "50051:50051"
+    depends_on:
+      - message-broker-server
+      - mongodb
+    networks:
+      - backend 
+
+  node-api-gateway:
+    image: huynhthanhdat1108/node-api-gateway:latest
+    volumes:
+      - ./configs/node-api-gateway.toml:/configs/node-api-gateway.toml 
+    environment:
+      - CONFIG_PATH=/confgis/node-api-server.toml
+    restart: always
+    ports:
+      - "3001:3001"
+    # depends_on:
+    #   - node-api-server
+    networks:
+      - backend 
+    
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory-policy allkeys-lru --maxmemory 4G
+    restart: always
+    networks:
+      - backend 
+    volumes:
+      - ./data/redis-data:/data
+
+networks:
+  backend:
+    external: true
+    name: backend
+    driver: bridge
