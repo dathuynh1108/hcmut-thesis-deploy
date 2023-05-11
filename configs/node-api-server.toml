@@ -13,7 +13,7 @@ binding_ip_address = "0.0.0.0"
 [database.mongodb]
 user = "root"
 password = "12345"
-host = "mongodb"
+host = "10.99.7.200"
 port = "27017"
 db_name = "iot_security_app"
 options = { auth_source = "admin", use_new_url_parser = true, use_unified_topology = true }
@@ -32,7 +32,7 @@ origin = "*"
 
 
 [rabbitmq]
-host = "message-broker-server"
+host = "10.110.109.86"
 username = "guest"
 password = "guest"
 port = "5672"

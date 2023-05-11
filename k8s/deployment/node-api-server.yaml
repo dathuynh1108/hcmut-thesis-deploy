@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-api-server-service
+spec:
+  selector:
+    app: node-api-server
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+    - name: grpc
+      port: 50051
+      targetPort: 50051
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-api-server-deployment
+  labels:
+    app: node-api-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-api-server
+  template:
+    metadata:
+      labels:
+        app: node-api-server
+    spec:
+      containers:
+      - name: node-api-server
+        image: huynhthanhdat1108/node-api-server:latest
+        ports:
+          - containerPort: 3000
+          - containerPort: 50051
+        env:
+          - name: CONFIG_PATH
+            value: /configs/node-api-server.toml
+          - name: BROKER_HOST
+            value: 10.110.109.86
+        volumeMounts:
+          - name: config-volume
+            mountPath: /configs
+      volumes:
+        - name: config-volume
+          persistentVolumeClaim:
+            claimName: config-volume-claim
