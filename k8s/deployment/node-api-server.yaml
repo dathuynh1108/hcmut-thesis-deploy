@@ -42,9 +42,13 @@ spec:
           - name: BROKER_HOST
             value: 10.110.109.86
         volumeMounts:
-          - name: config-volume
+          - name: config-files
             mountPath: /configs
+            readOnly: true
       volumes:
-        - name: config-volume
-          persistentVolumeClaim:
-            claimName: config-volume-claim
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: node-api-server.toml
+                path: node-api-server.toml

@@ -1,0 +1,1 @@
+kubectl create configmap config-files --from-file=/home/dathuynh/hcmut-thesis-deploy/configs
