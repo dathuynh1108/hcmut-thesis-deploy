@@ -25,10 +25,8 @@ services:
     command: -c /configs/controller.toml
     ports:
       - 5551:5551 # gRPC port
-      - 8554:8554 # RTSP port
-      - 8322:8322 # RTP port
       - 8080:8080 # HTTP + WS port
-      - 8000-8003:8000-8003 # multicast 
+
     networks:
       - backend
     depends_on:
@@ -100,6 +98,17 @@ services:
       - backend 
     volumes:
       - ./data/redis-data:/data
+
+  rtsp_server:
+    image: huynhthanhdat1108/rtsp_server:latest
+    volumes:
+      - ./configs/rtsp-simple-server.yml:/configs/rtsp_server/rtsp-simple-server.yml
+    networks:
+     - backend
+    ports:
+      - 8554:8554 # RTSP port
+      - 8322:8322 # RTP port
+      - 8000-8003:8000-8003 # multicast 
 
 networks:
   backend:
