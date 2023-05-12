@@ -1,0 +1,4 @@
+Expose port: HTTP/WS Controller
+Các port của gateway
+Port RTSP Server
+ICE Mux (? Đã qua TURN thì có cần không)
