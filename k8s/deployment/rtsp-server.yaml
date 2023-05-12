@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtsp-server-service
+spec:
+  selector:
+    app: rtsp-server
+  ports:
+    - name: rtsp-tcp
+      protocol: TCP
+      port: 8554
+      targetPort: 8554
+    - name: rtsp-udp
+      protocol: UDP
+      port: 8554
+      targetPort: 8554
+    
+    - name: rtp-tcp
+      protocol: TCP
+      port: 8322
+      targetPort: 8322
+
+    - name: rtp-udp
+      protocol: UDP
+      port: 8322
+      targetPort: 8322    
+    
+    
+    - name: multicast-8000-tcp
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+   
+    - name: multicast-8000-udp
+      protocol: UDP
+      port: 8000
+      targetPort: 8000
+    
+    - name: multicast-8001-tcp
+      protocol: TCP
+      port: 8001
+      targetPort: 8001
+
+    - name: multicast-8001-udp
+      protocol: UDP
+      port: 8001
+      targetPort: 8001
+
+    - name: multicast-8002-tcp
+      protocol: TCP
+      port: 8002
+      targetPort: 8002
+
+    - name: multicast-8002-udp
+      protocol: UDP
+      port: 8002
+      targetPort: 8002    
+    
+    - name: multicast-8003-tcp
+      protocol: TCP
+      port: 8003
+      targetPort: 8003
+
+    - name: multicast-8003-udp
+      protocol: UDP
+      port: 8003
+      targetPort: 8003
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtsp-server-deployment
+  labels:
+    app: rtsp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtsp-server
+  template:
+    metadata:
+      labels:
+        app: rtsp-server
+    spec:
+      containers:
+      - name: rtsp-server
+        image: huynhthanhdat1108/rtsp-server:latest
+        ports:
+          - containerPort: 8554
+            protocol: TCP
+          - containerPort: 8554
+            protocol: UDP
+          - containerPort: 8322
+            protocol: TCP
+          - containerPort: 8322
+            protocol: UDP
+          - containerPort: 8000
+            protocol: TCP
+          - containerPort: 8000
+            protocol: UDP
+          - containerPort: 8001
+            protocol: TCP
+          - containerPort: 8001
+            protocol: UDP
+          - containerPort: 8002
+            protocol: TCP
+          - containerPort: 8002
+            protocol: UDP
+          - containerPort: 8003
+            protocol: TCP
+          - containerPort: 8003  
+            protocol: UDP        
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: rtsp-simple-server.yml
+                path: rtsp-simple-server.yml

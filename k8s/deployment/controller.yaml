@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: controller-service
+spec:
+  selector:
+    app: controller
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: grpc
+      port: 5551
+      targetPort: 5551
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-deployment
+  labels:
+    app: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: controller
+  template:
+    metadata:
+      labels:
+        app: controller
+    spec:
+      containers:
+      - name: controller
+        image: huynhthanhdat1108/controller:latest
+        ports:
+          - containerPort: 8080
+          - containerPort: 5551
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: controller.toml
+                path: controller.toml

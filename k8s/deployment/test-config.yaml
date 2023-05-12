@@ -4,9 +4,12 @@ metadata:
   name: test-config
 spec:
   containers:
-  - name: alpine
-    image: alpine:latest
+  - name: test-config
+    image: huynhthanhdat1108/node-api-server:latest
     command: ['sleep', 'infinity']
+    env:
+      - name: CONFIG_PATH
+        value: /configs/node-api-server.toml
     volumeMounts:
           - name: config-files
             mountPath: /configs
