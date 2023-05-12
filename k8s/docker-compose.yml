@@ -6,4 +6,5 @@ services:
     volumes:
       - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
     extra_hosts:
+      - "hcmut-thesis-controller.com:192.168.49.2"
       - "hcmut-thesis-gateway.com:192.168.49.2"
