@@ -4,7 +4,9 @@ services:
     image: nginx
     network_mode: host
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     extra_hosts:
-      - "hcmut-thesis-controller.com:192.168.49.2"
-      - "hcmut-thesis-gateway.com:192.168.49.2"
+      - "controller-gateway.com:192.168.49.2"
+      - "api-gateway.com:192.168.49.2"
+      - "front-end.com:192.168.49.2"
+    
