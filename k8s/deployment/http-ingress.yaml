@@ -1,15 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress
+  name: http-ingress
   annotations:
     nginx.ingress.kubernetes.io/enable-directory-listing: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
 spec:
   rules:
-    - host: controller-gateway.com
-      http:
+    - http: 
         paths:
-          - path: /
+          - path: /controller-http(/|$)(.*)
             pathType: Prefix
             backend:
               service:
