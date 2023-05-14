@@ -1,4 +1,5 @@
 sudo cp ./nginx/smartss.click.conf /etc/nginx/conf.d/smartss.click.conf
+sudo cp ./nginx/stream.conf /etc/nginx/nohttp_conf/stream.conf
 
 sudo nginx -t && sudo nginx -s reload
 
