@@ -1,6 +1,6 @@
 sudo cp ./nginx/smartss.click.conf /etc/nginx/conf.d/smartss.click.conf
 
-nginx -t && nginx -s reload
+sudo nginx -t && sudo nginx -s reload
 
 kubectl proxy
 ssh -L 12345:localhost:8001 dathuynh@103.188.244.219
