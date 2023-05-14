@@ -1,0 +1,46 @@
+
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        root /usr/share/nginx/html;
+        server_name smartss.click;
+    }
+    # server {
+    #     listen [::]:80; # Add [::]: for listen on IPv4 and v6
+    #     server_name smartss.click;
+    
+    #     # Redirect all HTTP traffic to HTTPS
+    #     return 301 https://$host$request_uri;
+    # }
+
+    # server {
+    #     listen [::]:443 ssl;
+    #     server_name smartss.click; 
+
+       
+       
+    #     # Route to controller API
+    #     location /controller-gateway {
+    #         proxy_pass http://controller-gateway.com;
+    #         # proxy_set_header Host controller-gateway.com; # Important to work with ingress, ingress catch hostname
+    #         proxy_set_header X-Real-IP $remote_addr;
+    #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #         proxy_set_header X-Forwarded-Proto https;
+    #     }
+    #     # Route to node api server gateway
+    #     location /api-gateway {
+    #         proxy_pass http://api-gateway.com;
+    #         # proxy_set_header Host controller-gateway.com; # Important to work with ingress, ingress catch hostname
+    #         proxy_set_header X-Real-IP $remote_addr;
+    #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #         proxy_set_header X-Forwarded-Proto https;
+    #     }
+    #     # Route to frontend
+    #     location / {
+    #         proxy_pass http://frontend.com;
+    #         # proxy_set_header Host controller-gateway.com; # Important to work with ingress, ingress catch hostname
+    #         proxy_set_header X-Real-IP $remote_addr;
+    #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #         proxy_set_header X-Forwarded-Proto https;
+    #     }
+    # }

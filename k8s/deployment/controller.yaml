@@ -12,7 +12,7 @@ spec:
     - name: grpc
       port: 5551
       targetPort: 5551
-  type: LoadBalancer
+  #type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment

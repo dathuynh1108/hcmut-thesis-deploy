@@ -19,8 +19,6 @@
 # Default server configuration
 #
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
 
 	# SSL configuration
 	#
@@ -43,7 +41,7 @@ server {
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html;
 
-	server_name _;
+	server_name smartss.click;
 
 	location / {
 		# First attempt to serve request as file, then
@@ -68,6 +66,14 @@ server {
 	#location ~ /\.ht {
 	#	deny all;
 	#}
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/smartss.click/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/smartss.click/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
 }
 
 
@@ -89,3 +95,18 @@ server {
 #		try_files $uri $uri/ =404;
 #	}
 #}
+
+server {
+    if ($host = smartss.click) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	server_name smartss.click;
+    return 404; # managed by Certbot
+
+
+}

@@ -1,14 +1,12 @@
 apiVersion: networking.k8s.io/v1
-   
 kind: Ingress
-   
 metadata:
-  name: gateway-ingress
+  name: ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1   
+    nginx.ingress.kubernetes.io/enable-directory-listing: "true"
 spec:
   rules:
-    - host: hcmut-thesis-controller.com
+    - host: controller-gateway.com
       http:
         paths:
           - path: /

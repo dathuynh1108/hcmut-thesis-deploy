@@ -65,7 +65,7 @@ spec:
       protocol: UDP
       port: 8003
       targetPort: 8003
-  type: LoadBalancer
+  #type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
