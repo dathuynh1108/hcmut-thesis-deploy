@@ -13,6 +13,7 @@ spec:
       port: 5551
       targetPort: 5551
   #type: LoadBalancer
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment

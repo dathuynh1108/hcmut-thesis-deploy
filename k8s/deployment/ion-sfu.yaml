@@ -15,6 +15,7 @@ spec:
       port: 5000
       targetPort: 5000
   #type: LoadBalancer
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
