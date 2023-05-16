@@ -12,6 +12,8 @@ services:
       - HTTPS_PROXY="https://localhost/rancher"
     volumes:
     - "rancher-data:/var/lib/rancher"
+    - "/etc/letsencrypt/live/smartss.click/fullchain.pem:/etc/rancher/ssl/cert.pem"
+    - "/etc/letsencrypt/live/smartss.click/privkey.pem:/etc/rancher/ssl/key.pem"
     privileged: true
 
 volumes:
