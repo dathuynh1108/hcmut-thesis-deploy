@@ -1,3 +1,4 @@
+File config mặc định của nginx: /etc/nginx/nginx.conf
 Expose port: HTTP/WS Controller
 Các port của gateway
 Port RTSP Server
