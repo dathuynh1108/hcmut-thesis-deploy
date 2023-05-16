@@ -1,12 +1,15 @@
-version: '3'
+version: '2'
+
 services:
-  nginx:
-    image: nginx
-    network_mode: host
+  rancher:
+    image: rancher/rancher:latest
+    restart: always
+    ports:
+    - "8080:80/tcp"
+    - "8443:443/tcp"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    extra_hosts:
-      - "controller-gateway.com:192.168.49.2"
-      - "api-gateway.com:192.168.49.2"
-      - "front-end.com:192.168.49.2"
-    
+    - "rancher-data:/var/lib/rancher"
+    privileged: true
+
+volumes:
+  rancher-data:

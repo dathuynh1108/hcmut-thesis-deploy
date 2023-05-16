@@ -17,3 +17,27 @@ spec:
                 name: controller-service
                 port:
                   number: 8080
+
+          - path: /api-gateway(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: node-api-server-service
+                port:
+                  number: 3001
+          
+          - path: /front-end(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: front-end-service
+                port:
+                  number: 3000
+
+          - path: /rabbitmq(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq-service
+                port:
+                  number: 15672
