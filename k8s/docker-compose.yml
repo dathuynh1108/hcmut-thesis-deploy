@@ -7,6 +7,9 @@ services:
     ports:
     - "8080:80/tcp"
     - "8443:443/tcp"
+    environment:
+      - HTTP_PROXY="http://localhost/rancher"
+      - HTTPS_PROXY="https://localhost/rancher"
     volumes:
     - "rancher-data:/var/lib/rancher"
     privileged: true
