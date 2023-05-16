@@ -63,7 +63,7 @@ services:
       - ./configs/node-api-server.toml:/configs/node-api-server.toml 
     environment:
       - BROKER_HOST=rabbitmq
-      - CONFIG_PATH=/confgis/node-api-server.toml
+      - CONFIG_PATH=/configs/node-api-server.toml
     restart: always
     ports:
       - "3000:3000"
@@ -79,7 +79,7 @@ services:
     volumes:
       - ./configs/node-api-gateway.toml:/configs/node-api-gateway.toml 
     environment:
-      - CONFIG_PATH=/confgis/node-api-server.toml
+      - CONFIG_PATH=/configs/node-api-gateway.toml
     restart: always
     ports:
       - "3001:3001"
