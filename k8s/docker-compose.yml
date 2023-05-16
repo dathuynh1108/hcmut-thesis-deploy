@@ -12,6 +12,7 @@ services:
     - "/etc/letsencrypt/live/smartss.click/fullchain.pem:/etc/rancher/ssl/cert.pem"
     - "/etc/letsencrypt/live/smartss.click/privkey.pem:/etc/rancher/ssl/key.pem"
     privileged: true
+    command: --no-cacerts
 
 volumes:
   rancher-data:
