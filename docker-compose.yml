@@ -1,5 +1,5 @@
 services:
-  sfu:
+  sfu-service:
     image: huynhthanhdat1108/ion-sfu:latest
     volumes:
       - ./configs/sfu.toml:/configs/sfu.toml
@@ -13,7 +13,7 @@ services:
     depends_on:
       - redis
     
-  controller:
+  controller-service:
     image: huynhthanhdat1108/controller:latest
     volumes:
       - ./configs/controller.toml:/configs/controller.toml
@@ -31,7 +31,7 @@ services:
     depends_on:
       - redis
 
-  mongodb:
+  mongodb-service:
     image: mongo
     restart: always
     environment:
@@ -44,7 +44,7 @@ services:
     networks:
       - backend 
 
-  message-broker-server:
+  rabbitmq-service:
     image: huynhthanhdat1108/message-broker-server:latest
     ports:
         - 5672:5672
@@ -56,7 +56,7 @@ services:
     networks:
       - backend 
 
-  node-api-server:
+  node-api-server-service:
     image: huynhthanhdat1108/node-api-server:latest
     volumes:
       - ./configs/node-api-server.toml:/configs/node-api-server.toml 
@@ -73,7 +73,7 @@ services:
     networks:
       - backend 
 
-  node-api-gateway:
+  node-api-gateway-service:
     image: huynhthanhdat1108/node-api-gateway:latest
     volumes:
       - ./configs/node-api-gateway.toml:/configs/node-api-gateway.toml 
@@ -87,7 +87,7 @@ services:
     networks:
       - backend 
     
-  redis:
+  redis-service:
     image: "redis"
     ports:
       - "6379:6379"
@@ -98,7 +98,7 @@ services:
     volumes:
       - ./data/redis-data:/data
 
-  rtsp_server:
+  rtsp-server-service:
     image: huynhthanhdat1108/rtsp-server:latest
     volumes:
       - ./configs/rtsp-simple-server.yml:/configs/rtsp_server/rtsp-simple-server.yml
