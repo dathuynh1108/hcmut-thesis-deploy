@@ -17,7 +17,7 @@ services:
     image: huynhthanhdat1108/controller:latest
     volumes:
       - ./configs/controller.toml:/configs/controller.toml
-      - ./controller/configs:/configs
+      - ./configs/google-service-account.json:/configs/google-service-account.json
       - ./logs:/logs
       - ./videos:/videos
     # restart: always
