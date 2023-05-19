@@ -99,7 +99,7 @@ services:
       - ./data/redis-data:/data
 
   rtsp_server:
-    image: huynhthanhdat1108/rtsp_server:latest
+    image: huynhthanhdat1108/rtsp-server:latest
     volumes:
       - ./configs/rtsp-simple-server.yml:/configs/rtsp_server/rtsp-simple-server.yml
       - ./logs/logs
