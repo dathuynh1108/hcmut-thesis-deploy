@@ -124,8 +124,8 @@ scheme = "http"
 host = "localhost"
 port = "5000"
 
-[rtsp_sender_server]
-[rtsp_sender_server.grpc]
+[controller_server]
+[controller_server.grpc]
 host = "controller"
 port = "5551"
 
