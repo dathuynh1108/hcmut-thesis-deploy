@@ -11,7 +11,7 @@ services:
     networks:
       - backend 
     depends_on:
-      - redis
+      - redis-service
     
   controller-service:
     image: huynhthanhdat1108/controller:latest
@@ -29,7 +29,7 @@ services:
     networks:
       - backend
     depends_on:
-      - redis
+      - redis-service
 
   mongodb-service:
     image: mongo
@@ -68,8 +68,8 @@ services:
       - "3000:3000"
       - "50051:50051"
     depends_on:
-      - message-broker-server
-      - mongodb
+      - rabbitmq-service
+      - mongodb-service
     networks:
       - backend 
 
