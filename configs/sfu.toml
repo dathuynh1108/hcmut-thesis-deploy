@@ -105,7 +105,7 @@ v = 1
 
 [redis]
 # address = "0.0.0.0:6379"
-address = "redis:6379"
+address = "redis-service:6379"
 # Split address by COMMA, Example: address = "0.0.0.0:6379, 0.0.0.0:6379"
 database = "0"
 is_cluster = "false"
