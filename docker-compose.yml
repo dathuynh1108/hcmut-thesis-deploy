@@ -17,8 +17,7 @@ services:
     image: huynhthanhdat1108/controller:latest
     volumes:
       - ./configs/controller.toml:/configs/controller.toml
-      - ./configs/rtsp-simple-server:/configs/rtsp-simple-server
-      - ./configs/rtsp-simple-server.yml:/configs/rtsp-simple-server.yml
+      - ./controller/configs:/configs
       - ./logs:/logs
       - ./videos:/videos
     # restart: always
