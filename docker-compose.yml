@@ -7,7 +7,7 @@ services:
     # restart: always
     command: -c /configs/sfu.toml
     ports:
-      - 5000:5000 # ICE mux port
+      - 5000:5000/udp # ICE mux port
       - 7000:7000
     environment:
       - jaddr=:7000
