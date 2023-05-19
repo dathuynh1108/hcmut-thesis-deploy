@@ -102,7 +102,7 @@ services:
     image: huynhthanhdat1108/rtsp-server:latest
     volumes:
       - ./configs/rtsp-simple-server.yml:/configs/rtsp_server/rtsp-simple-server.yml
-      - ./logs/logs
+      - ./logs:/logs
     networks:
      - backend
     ports:
