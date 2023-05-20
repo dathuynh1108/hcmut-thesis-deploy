@@ -41,6 +41,8 @@ spec:
           - name: config-files
             mountPath: /configs
             readOnly: true
+          - name: volume
+            mountPath: /videos
       volumes:
         - name: config-files
           configMap:
@@ -50,3 +52,6 @@ spec:
                 path: controller.toml
               - key: google-service-account.json
                 path: google-service-account.json
+        - name: volume
+          persistentVolumeClaim:
+            claimName: volume-claim
