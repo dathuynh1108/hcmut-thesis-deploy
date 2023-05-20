@@ -6,16 +6,21 @@ spec:
   selector:
     app: ion-sfu
   ports:
-    - name: icemux-tcp
-      protocol:  TCP
-      port: 5000
-      targetPort: 5000
+    # - name: icemux-tcp
+    #   protocol:  TCP
+    #   port: 5000
+    #   targetPort: 5000
     - name: icemux-udp
       protocol:  UDP
       port: 5000
       targetPort: 5000
+    - name: grpc
+      port: 5551
+      targetPort: grpc
+    - name: jsonrpc
+      port: 7000
+      targetPort: jsonrpc
   #type: LoadBalancer
-  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -33,11 +38,21 @@ spec:
       labels:
         app: ion-sfu
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 30
       containers:
       - name: ion-sfu
         image: huynhthanhdat1108/ion-sfu:latest
         ports:
           - containerPort: 5000
+            protocol: UDP
+          - name: grpc
+            containerPort: 50051
+          - name: jsonrpc
+            containerPort: 7000
+          - name: metrics
+            containerPort: 9123
         volumeMounts:
           - name: config-files
             mountPath: /configs

@@ -48,3 +48,5 @@ spec:
             items:
               - key: controller.toml
                 path: controller.toml
+              - key: google-service-account.json
+                path: google-service-account.json
