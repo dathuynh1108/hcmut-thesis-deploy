@@ -48,6 +48,10 @@ urls = ["stun:stun.l.google.com:19302"]
 urls = ["turn:turnserver.trueid.vn:3478?transport=udp"]
 username = "1693213423:test-turn-server"
 credential = "8kmeWarEurWpB0EwepSjHeiQhvg="
+# [[webrtc.iceserver]]
+# urls = ["turn:turnserver.trueid.vn:3478?transport=udp"]
+# username = "1693213423:test-turn-server"
+# credential = "8kmeWarEurWpB0EwepSjHeiQhvg="
 # sdp semantics:
 # "unified-plan"
 # "plan-b"
