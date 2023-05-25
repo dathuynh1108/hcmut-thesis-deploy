@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-api-gateway-service
+spec:
+  selector:
+    app: node-api-gateway
+  ports:
+    - name: http
+      port: 3001
+      targetPort: 3001
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-api-gateway-deployment
+  labels:
+    app: node-api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-api-gateway
+  template:
+    metadata:
+      labels:
+        app: node-api-gateway
+    spec:
+      containers:
+      - name: node-api-gateway
+        image: huynhthanhdat1108/node-api-gateway:latest
+        ports:
+          - containerPort: 3001
+        env:
+          - name: CONFIG_PATH
+            value: /configs/node-api-gateway.toml
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: node-api-gateway.toml
+                path: node-api-gateway.toml

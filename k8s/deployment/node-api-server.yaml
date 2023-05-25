@@ -12,7 +12,7 @@ spec:
     - name: grpc
       port: 50051
       targetPort: 50051
-  type: NodePort
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -40,7 +40,7 @@ spec:
           - name: CONFIG_PATH
             value: /configs/node-api-server.toml
           - name: BROKER_HOST
-            value: 10.110.109.86
+            value: rabbitmq-service
         volumeMounts:
           - name: config-files
             mountPath: /configs
