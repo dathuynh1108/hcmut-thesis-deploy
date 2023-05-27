@@ -40,5 +40,5 @@ spec:
               service:
                 name: front-end-service
                 port:
-                  number: 3003
+                  number: 3000
       
