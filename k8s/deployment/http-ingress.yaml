@@ -26,14 +26,6 @@ spec:
                 port:
                   number: 3001
           
-          - path: /front-end(/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: front-end-service
-                port:
-                  number: 3000
-
           - path: /rabbitmq(/|$)(.*)
             pathType: Prefix
             backend:
@@ -41,3 +33,12 @@ spec:
                 name: rabbitmq-service
                 port:
                   number: 15672
+          
+          - path: /frontend(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: front-end-service
+                port:
+                  number: 3003
+      
