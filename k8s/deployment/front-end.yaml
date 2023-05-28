@@ -31,4 +31,4 @@ spec:
       - name: front-end
         image: huynhthanhdat1108/front-end:latest
         ports:
-          - containerPort: 3003
+          - containerPort: 3000
