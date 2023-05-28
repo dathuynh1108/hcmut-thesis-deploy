@@ -7,8 +7,8 @@ spec:
     app: front-end
   ports:
     - name: http
-      port: 3003
-      targetPort: 3003
+      port: 3000
+      targetPort: 3000
   clusterIP: None
 ---
 apiVersion: apps/v1
