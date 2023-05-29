@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-server-service
+spec:
+  selector:
+    app: ai-server
+  ports:
+    - name: http
+      port: 5005
+      targetPort: 5005
+    - name: grpc
+      port: 50052
+      targetPort: 50052
+  #type: LoadBalancer
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-server-deployment
+  labels:
+    app: ai-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-server
+  template:
+    metadata:
+      labels:
+        app: ai-server
+    spec:
+      containers:
+      - name: ai-server
+        image: huynhthanhdat1108/ai-server:latest
+        ports:
+          - containerPort: 5005
+          - containerPort: 50052
+        env:
+          - name: CONFIG_PATH
+            value: /configs/ai-server.toml
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+          - name: volume
+            mountPath: /static
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: ai-server.toml
+                path: ai-server.toml
+        - name: volume
+          persistentVolumeClaim:
+            claimName: volume-claim
