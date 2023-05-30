@@ -121,7 +121,7 @@ host = "ai-server-service"
 port = "5005"
 scheme = "http"
 [ai_server.grpc]
-host = "ai-server-serivce"
+host = "ai-server-service"
 port = "50052"
 
 [controller_server]
