@@ -29,7 +29,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: node-api-gateway-service
+                name: ai-server-service
                 port:
                   number: 5005
 
