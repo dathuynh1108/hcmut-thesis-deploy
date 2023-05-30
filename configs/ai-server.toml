@@ -1,8 +1,8 @@
 [server]
 [server.http]
-host = "localhost"
+host = "smartss.click/ai-server"
 port = "5005"
-scheme = "http"
+scheme = "https"
 
 [server.grpc]
 host = "localhost"
