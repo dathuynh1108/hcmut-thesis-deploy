@@ -6,7 +6,6 @@ metadata:
     nginx.ingress.kubernetes.io/enable-directory-listing: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
-spec:
   rules:
     - http: 
         paths:
@@ -26,6 +25,14 @@ spec:
                 port:
                   number: 3001
           
+          - path: /ai-server(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: node-api-gateway-service
+                port:
+                  number: 5005
+
           - path: /rabbitmq(/|$)(.*)
             pathType: Prefix
             backend:
