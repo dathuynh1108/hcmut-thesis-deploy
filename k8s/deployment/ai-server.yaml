@@ -53,6 +53,8 @@ spec:
             items:
               - key: ai-server.toml
                 path: ai-server.toml
+              - key: google-service-account.json
+                path: google-service-account.json
         - name: volume
           persistentVolumeClaim:
             claimName: volume-claim
