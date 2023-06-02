@@ -5,7 +5,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: hostpath
+  storageClassName: standard
   capacity:
     storage: 10Gi
   accessModes:
@@ -19,7 +19,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: volume-claim
 spec:
-  storageClassName: hostpath
+  storageClassName: standard
   accessModes:
     - ReadWriteMany
   resources:
