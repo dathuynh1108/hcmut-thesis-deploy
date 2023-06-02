@@ -43,6 +43,7 @@ spec:
             readOnly: true
           - name: volume
             mountPath: /videos
+            subPath: controller-volume
       volumes:
         - name: config-files
           configMap:

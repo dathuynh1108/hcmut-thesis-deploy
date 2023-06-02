@@ -33,7 +33,7 @@ spec:
         volumeMounts:
         - mountPath: /data/db
           name: volume
-      
+          subPath: mongodb-volume
       volumes:
         - name: volume
           persistentVolumeClaim:
