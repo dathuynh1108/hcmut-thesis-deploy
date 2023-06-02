@@ -2,16 +2,16 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: volume
-  labels:
-    type: local
 spec:
   storageClassName: standard
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
-  hostPath:
-    path: "/volume"
+  persistentVolumeReclaimPolicy: Retain    
+  nfs:
+    server: 192.168.49.1
+    path: "/mnt/nfs_share"
 
 ---
 apiVersion: v1
