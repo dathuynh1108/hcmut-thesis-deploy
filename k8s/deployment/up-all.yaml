@@ -1,0 +1,395 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: volume
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain    
+  nfs:
+    server: 192.168.49.1
+    path: "/mnt/nfs_share"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: volume-claim
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+type: Opaque
+data:
+  mongo-root-username: cm9vdA== #root
+  mongo-root-password: MTIzNDU= #12345
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        ports:
+          - containerPort: 27017
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongo-root-username
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongo-root-password
+        volumeMounts:
+        - mountPath: /data/db
+          name: volume
+          subPath: mongodb-data
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: volume-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017   
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+    - name: management
+      port: 15672
+      targetPort: 15672
+    - name: mqtt
+      port: 1883
+      targetPort: 1883
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: huynhthanhdat1108/message-broker-server:latest
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+            - containerPort: 1883
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-api-gateway-service
+spec:
+  selector:
+    app: node-api-gateway
+  ports:
+    - name: http
+      port: 3001
+      targetPort: 3001
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-api-gateway-deployment
+  labels:
+    app: node-api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-api-gateway
+  template:
+    metadata:
+      labels:
+        app: node-api-gateway
+    spec:
+      containers:
+      - name: node-api-gateway
+        image: huynhthanhdat1108/node-api-gateway:latest
+        ports:
+          - containerPort: 3001
+        env:
+          - name: CONFIG_PATH
+            value: /configs/node-api-gateway.toml
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: node-api-gateway.toml
+                path: node-api-gateway.toml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-api-server-service
+spec:
+  selector:
+    app: node-api-server
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+    - name: grpc
+      port: 50051
+      targetPort: 50051
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-api-server-deployment
+  labels:
+    app: node-api-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-api-server
+  template:
+    metadata:
+      labels:
+        app: node-api-server
+    spec:
+      containers:
+      - name: node-api-server
+        image: huynhthanhdat1108/node-api-server:latest
+        ports:
+          - containerPort: 3000
+          - containerPort: 50051
+        env:
+          - name: CONFIG_PATH
+            value: /configs/node-api-server.toml
+          - name: BROKER_HOST
+            value: rabbitmq-service
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: node-api-server.toml
+                path: node-api-server.toml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ion-sfu-service
+spec:
+  selector:
+    app: ion-sfu
+  ports:
+    - name: icemux-tcp
+      protocol:  TCP
+      port: 5001
+      targetPort: 5001
+    - name: icemux-udp
+      protocol:  UDP
+      port: 5000
+      targetPort: 5000
+    # - name: grpc
+    #   port: 5551
+    #   targetPort: grpc
+    # - name: jsonrpc
+    #   port: 7000
+    #   targetPort: jsonrpc
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ion-sfu-deployment
+  labels:
+    app: ion-sfu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ion-sfu
+  template:
+    metadata:
+      labels:
+        app: ion-sfu
+    spec:
+      containers:
+      - name: ion-sfu
+        image: huynhthanhdat1108/ion-sfu:latest
+        ports:
+          - containerPort: 5000
+            protocol: UDP
+          - containerPort: 5001
+            protocol: TCP
+          # - name: grpc
+          #   containerPort: 5551
+          # - name: jsonrpc
+          #   containerPort: 7000
+          # - name: metrics
+          #   containerPort: 9123
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: sfu.toml
+                path: sfu.toml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: controller-service
+spec:
+  selector:
+    app: controller
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: grpc
+      port: 5551
+      targetPort: 5551
+  #type: LoadBalancer
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-deployment
+  labels:
+    app: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: controller
+  template:
+    metadata:
+      labels:
+        app: controller
+    spec:
+      containers:
+      - name: controller
+        image: huynhthanhdat1108/controller:latest
+        ports:
+          - containerPort: 8080
+          - containerPort: 5551
+        volumeMounts:
+          - name: config-files
+            mountPath: /configs
+            readOnly: true
+          - name: volume
+            mountPath: /videos
+            subPath: controller-data
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            items:
+              - key: controller.toml
+                path: controller.toml
+              - key: google-service-account.json
+                path: google-service-account.json
+        - name: volume
+          persistentVolumeClaim:
+            claimName: volume-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end-service
+spec:
+  selector:
+    app: front-end
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-end-deployment
+  labels: 
+    app: front-end
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-end
+  template:
+    metadata:
+      labels:
+        app: front-end
+    spec:
+      containers:
+      - name: front-end
+        image: huynhthanhdat1108/front-end:latest
+        ports:
+          - containerPort: 3000
+---
