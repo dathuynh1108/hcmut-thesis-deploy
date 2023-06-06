@@ -95,7 +95,8 @@ credentials="/configs/google-service-account.json"
 destination="1ObING3lxYLZRPyi5u7yyKDPUA6rJqq3E"
 
 
-
+[worker_pool]
+video_process_worker = 4
 
 
 
