@@ -13,6 +13,14 @@ services:
     - "/etc/letsencrypt/live/smartss.click/privkey.pem:/etc/rancher/ssl/key.pem"
     privileged: true
     command: --no-cacerts
+  
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+    - "8080:8080"
+    - "50000:50000"
+    volumes:
+    - "./jenkins:/var/jenkins_home"
 
 volumes:
   rancher-data:

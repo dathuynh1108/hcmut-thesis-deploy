@@ -45,7 +45,7 @@ spec:
             mountPath: /configs
             readOnly: true
           - name: volume
-            mountPath: /static
+            mountPath: /usr/app/ai_server/static
             subPath: ai-server-data
       volumes:
         - name: config-files
